@@ -1,3 +1,5 @@
+import 'package:pummel_the_fish/data/models/owner.dart';
+
 enum Species { dog, cat, bird, fish }
 
 class Pet {
@@ -8,6 +10,7 @@ class Pet {
   final double weight;
   final double height;
   final bool isFemale;
+  final Owner? owner;
 
   const Pet({
     required this.id,
@@ -17,5 +20,6 @@ class Pet {
     required this.weight,
     required this.height,
     this.isFemale = true,
-  });
+    this.owner
+  }); 
 }
