@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
+import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
 
-class FakePetRepository {
+class FakePetRepository implements PetRepository {
   final List<Pet> _pets = [
     const Pet(
       id: "1",
@@ -41,12 +42,36 @@ class FakePetRepository {
 
   FakePetRepository();
 
+  // Gibt das Pet-Objekt mit der gewünschten id zurück
+  // Wenn es das Pet-Objekt nicht gibt, wird null zurückgegeben
+  @override
+  Pet? getPetById(String id) {
+    return _pets.firstWhereOrNull(
+      (petElement) => petElement.id == id,
+    );
+  }
+
+  // Gibt eine sortierte Liste an Pet-Objekten zurück
+  @override
+  List<Pet> getAllPets() {
+    _sortPetsByName();
+    return _pets;
+  }
+
   // Fügt ein Pet-Objekt zur Liste hinzu
+  @override
   void addPet(Pet pet) {
     _pets.add(pet);
   }
 
+  // Löscht ein Pet-Objekt mit der gewünschten id aus der Liste
+  @override
+  void deletePetById(String id) {
+    _pets.removeWhere((pet) => pet.id == id);
+  }
+
   // Aktualisiert ein Objekt in der Liste, falls vorhanden
+  @override
   void updatePet(Pet pet) {
     final index = _pets.indexWhere(
       (element) => element.id == pet.id,
@@ -56,25 +81,6 @@ class FakePetRepository {
     }
   }
 
-  // Gibt das Pet-Objekt mit der gewünschten id zurück
-  // Wenn es das Pet-Objekt nicht gibt, wird null zurückgegeben
-  Pet? getPetById(String id) {
-    return _pets.firstWhereOrNull(
-      (petElement) => petElement.id == id,
-    );
-  }
-
-  // Gibt eine sortierte Liste an Pet-Objekten zurück
-  List<Pet> getAllPets() {
-    _sortPetsByName();
-    return _pets;
-  }
-
-  // Löscht ein Pet-Objekt mit der gewünschten id aus der Liste
-  void deletePetById(String id) {
-    _pets.removeWhere((pet) => pet.id == id);
-  }
-
   // Sortiert die Pet-Liste nach Namen
   void _sortPetsByName() {
     _pets.sort(
@@ -82,7 +88,6 @@ class FakePetRepository {
     );
   }
 
-  // T2K7: Asynchrone Programmierung - wenn es mal wieder länger dauert
   /// Diese Methode wird verwendet, um die Daten aus dem Mock-Server mit einem
   /// simulierten Delay zu laden.
   Future<List<Pet>> getAllPetsFromMockServer() async {

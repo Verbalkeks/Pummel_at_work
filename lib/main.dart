@@ -5,20 +5,20 @@ Future<void> main() async {
   // T2K7: Futures, async und await
   final petRepository = FakePetRepository();
 
-  // mit await-Schreibweise
-  print("/////\nawait Schreibweise");
-  final pets = await petRepository.getAllPetsFromMockServer();
-  for (var pet in pets) {
-    print(pet.name);
-  }
+  // // mit await-Schreibweise
+  // print("/////\nawait Schreibweise");
+  // final pets = await petRepository.getAllPetsFromMockServer();
+  // for (var pet in pets) {
+  //   print(pet.name);
+  // }
 
-  // oder mit .then-Schreibweise
-  print("/////\n.Then schreibweise.");
-  await petRepository.getAllPetsFromMockServer().then(
-    (pets) => {
-      for (var pet in pets) {print(pet.name)},
-    },
-  );
+  // // oder mit .then-Schreibweise
+  // print("/////\n.Then schreibweise.");
+  // await petRepository.getAllPetsFromMockServer().then(
+  //   (pets) => {
+  //     for (var pet in pets) {print(pet.name)},
+  //   },
+  // );
 
   // // T2K7: Ein Datenfluss - auch Stream genannt
   // final foodStream = Stream<String>.periodic(
