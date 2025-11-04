@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
 
+// class ExampleWidget extends StatelessWidget {
+//   const ExampleWidget({super.key});
+//   @override
+//   Widget build(BuildContext context) {
+//     // Hier wird das Widget gebaut
+//   }
+// }
+
+// class ExampleWidget extends StatefulWidget {
+//   const ExampleWidget({super.key});
+//   @override
+//   State<ExampleWidget> createState() => _ExampleWidgetState();
+// }
+
+// class _ExampleWidgetState extends State<ExampleWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     // Hier wird das Widget gebaut
+//   }
+// }
+
 Future<void> main() async {
   // T2K7: Futures, async und await
   final petRepository = FakePetRepository();
@@ -102,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Padding(
-              padding: EdgeInsetsGeometry.all(80),
+              padding: EdgeInsets.all(80),
               child: Text('You have pushed the button this many times:'),
             ),
             Text(
