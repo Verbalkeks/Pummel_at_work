@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
 import 'package:pummel_the_fish/screens/create_pet_screen.dart';
 import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
@@ -81,13 +82,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const brunoTheDog = Pet(
+      id: "2",
+      name: "Bruno",
+      species: Species.dog,
+      weight: 320.0,
+      height: 60.0,
+      age: 4,
+      isFemale: false,
+    );
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+        useMaterial3: false,
       ),
-      home: const HomeScreen(),
+      home: const DetailPetScreen(pet: brunoTheDog),
     );
   }
 }
