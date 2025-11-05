@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
 
-class CreatePetScreen extends StatelessWidget {
+class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
+
+  @override
+  State<CreatePetScreen> createState() => _CreatePetScreenState();
+}
+
+class _CreatePetScreenState extends State<CreatePetScreen> {
+  bool currentIsFemale = false;
+  String? currentName;
+  int? currentAge;
+  double? currentHeight;
+  double? currentWeight;
+  Species? currentSpecies;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +33,7 @@ class CreatePetScreen extends StatelessWidget {
                     labelText: "Name",
                   ),
                   onChanged: (value) {
-                    print(value);
+                    currentName = value;
                   },
                 ),
                 TextFormField(
@@ -29,7 +41,7 @@ class CreatePetScreen extends StatelessWidget {
                     labelText: "Alter (Jahre)",
                   ),
                   onChanged: (value) {
-                    print(value);
+                    currentAge = int.tryParse(value);
                   },
                 ),
                 TextFormField(
@@ -37,7 +49,7 @@ class CreatePetScreen extends StatelessWidget {
                     labelText: "Höhe (cm)",
                   ),
                   onChanged: (value) {
-                    print(value);
+                    currentHeight = double.tryParse(value);
                   },
                 ),
                 TextFormField(
@@ -45,21 +57,13 @@ class CreatePetScreen extends StatelessWidget {
                     labelText: "Gewicht (Gramm)",
                   ),
                   onChanged: (value) {
-                    print(value);
+                    currentWeight = double.tryParse(value);
                   },
                 ),
                 DropdownButtonFormField<Species>(
                   hint: const Text("Bitte wählen sie eine Spezies"),
                   items: const [
-                    DropdownMenuItem(
-                      value: Species.dog,
-                      child: Row(
-                        children: [
-                          Icon(Icons.pets),
-
-                        ]
-                      ),
-                    ),
+                    DropdownMenuItem(value: Species.dog, child: Text("Hund")),
                     DropdownMenuItem(
                       value: Species.cat,
                       child: Text("Katze"),
@@ -71,11 +75,48 @@ class CreatePetScreen extends StatelessWidget {
                     DropdownMenuItem(
                       value: Species.bird,
                       child: Text("Vogel"),
-                    )
+                    ),
                   ],
                   onChanged: (Species? value) {
-                    print(value);
+                    currentSpecies = value;
                   },
+                ),
+                CheckboxListTile(
+                  title: const Text("Weiblich"),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 16,
+                  ),
+                  value: currentIsFemale,
+                  onChanged: (bool? value) {
+                    if (value != null) {
+                      print(value);
+                      setState(() {
+                        currentIsFemale = value;
+                      });
+                    }
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (currentName != null &&
+                        currentAge != null &&
+                        currentSpecies != null &&
+                        currentWeight != null &&
+                        currentHeight != null) {
+                      final pet = Pet(
+                        id: "test",
+                        name: currentName!,
+                        species: currentSpecies!,
+                        age: currentAge!,
+                        weight: currentWeight!,
+                        height: currentHeight!,
+                        isFemale: currentIsFemale,
+                      );
+                      print("$pet");
+                    }
+                  },
+                  child: const Text("Speichern"),
                 ),
               ],
             ),

@@ -21,5 +21,11 @@ class Pet {
     required this.height,
     this.isFemale = true,
     this.owner
-  }); 
+  });
+ @override
+  String toString() {
+    return "Pet(id: $id,\nname: $name,\nspecies: $species,\nweight: $weight,\nheight: $height,\nage: $age,\nisFemale: $isFemale,\nowner: $owner,)";
+  }
+  
+ 
 }
