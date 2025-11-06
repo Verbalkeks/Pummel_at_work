@@ -44,49 +44,48 @@ class DetailPetScreen extends StatelessWidget {
                 horizontal: 24,
               ),
               child: Column(
-                children: <Widget>[
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text("Name des Kuscheltiers:"),
-                          Text(pet.name)
-                        ],
-                      ),
-                    ),
+                children: [
+                  _InfoCard(
+                    labelText: "Name des Kuscheltiers: ",
+                    infoText: pet.name,
                   ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text("Alter:"),
-                          Text("${pet.age} Jahre")
-                        ],
-                      ),
-                    ),
+                  _InfoCard(
+                    labelText: "Alter:",
+                    infoText: "${pet.age}",
                   ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text("Größe & Gewicht:"),
-                          Expanded(
-                            child: Text(
-                              "${pet.height} cm / ${pet.weight} g",
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  _InfoCard(
+                    labelText: "Größe & Gewicht",
+                    infoText: "${pet.height} cm / ${pet.weight} g",
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final String labelText;
+  final String infoText;
+  const _InfoCard({super.key, required this.labelText, required this.infoText});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(labelText),
+            Expanded(
+              child: Text(
+                infoText,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.fade,
               ),
             ),
           ],

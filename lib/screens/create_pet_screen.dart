@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
+import 'package:pummel_the_fish/widgets/custom_button.dart';
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
@@ -141,7 +142,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                     }
                   },
                 ),
-                ElevatedButton(
+                CustomButton(
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       final pet = Pet(
@@ -156,7 +157,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                       print("$pet");
                     }
                   },
-                  child: const Text("Speichern"),
+                  label: "Speichern",
                 ),
               ],
             ),
