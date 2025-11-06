@@ -9,6 +9,7 @@ class CreatePetScreen extends StatefulWidget {
 }
 
 class _CreatePetScreenState extends State<CreatePetScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool currentIsFemale = false;
   String? currentName;
   int? currentAge;
@@ -26,6 +27,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Form(
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 TextFormField(
@@ -35,6 +37,13 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                   onChanged: (value) {
                     currentName = value;
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Bitte einen Namen eingeben";
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -42,6 +51,17 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                   ),
                   onChanged: (value) {
                     currentAge = int.tryParse(value);
+                  },
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Bitte das Alter angeben";
+                    } else {
+                      if (int.tryParse(value) == null) {
+                        return "Bitte Zahl eingeben";
+                      }
+                    }
+                    return null;
                   },
                 ),
                 TextFormField(
@@ -51,6 +71,17 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                   onChanged: (value) {
                     currentHeight = double.tryParse(value);
                   },
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Bitte die Höhe angeben";
+                    } else {
+                      if (int.tryParse(value) == null) {
+                        return "Bitte Zahl eingeben";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -59,9 +90,20 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                   onChanged: (value) {
                     currentWeight = double.tryParse(value);
                   },
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Bitte Gewicht angeben";
+                    } else {
+                      if (int.tryParse(value) == null) {
+                        return "Bitte Zahl eingeben";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 DropdownButtonFormField<Species>(
-                  hint: const Text("Bitte wählen sie eine Spezies"),
+                  hint: const Text("Bitte wählen Sie eine Spezies"),
                   items: const [
                     DropdownMenuItem(value: Species.dog, child: Text("Hund")),
                     DropdownMenuItem(
@@ -80,6 +122,8 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                   onChanged: (Species? value) {
                     currentSpecies = value;
                   },
+                  validator: (value) =>
+                      value == null ? "Bitte Spezies angeben" : null,
                 ),
                 CheckboxListTile(
                   title: const Text("Weiblich"),
@@ -99,11 +143,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (currentName != null &&
-                        currentAge != null &&
-                        currentSpecies != null &&
-                        currentWeight != null &&
-                        currentHeight != null) {
+                    if (_formKey.currentState?.validate() ?? false) {
                       final pet = Pet(
                         id: "test",
                         name: currentName!,
