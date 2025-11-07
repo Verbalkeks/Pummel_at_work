@@ -16,7 +16,15 @@ class DetailPetScreen extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                Image.asset("assets/images/dog.png"),
+                Image.asset(
+                  pet.species == Species.dog
+                      ? "assets/images/dog.png"
+                      : pet.species == Species.bird
+                          ? "assets/images/bird.png"
+                          : pet.species == Species.cat
+                              ? "assets/images/cat.png"
+                              : "assets/images/fish.png",
+                ),
                 Positioned(
                   left: 0,
                   right: 0,
@@ -38,30 +46,44 @@ class DetailPetScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 40,
-                horizontal: 24,
-              ),
-              child: Column(
-                children: [
-                  _InfoCard(
-                    labelText: "Name des Kuscheltiers: ",
-                    infoText: pet.name,
-                  ),
-                  _InfoCard(
-                    labelText: "Alter:",
-                    infoText: "${pet.age}",
-                  ),
-                  _InfoCard(
-                    labelText: "Größe & Gewicht",
-                    infoText: "${pet.height} cm / ${pet.weight} g",
-                  ),
-                ],
-              ),
-            ),
+            _InfoCardsColumn(pet: pet),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _InfoCardsColumn extends StatelessWidget {
+  const _InfoCardsColumn({
+    super.key,
+    required this.pet,
+  });
+
+  final Pet pet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 40,
+        horizontal: 24,
+      ),
+      child: Column(
+        children: [
+          _InfoCard(
+            labelText: "Name des Kuscheltiers: ",
+            infoText: pet.name,
+          ),
+          _InfoCard(
+            labelText: "Alter:",
+            infoText: "${pet.age}",
+          ),
+          _InfoCard(
+            labelText: "Größe & Gewicht",
+            infoText: "${pet.height} cm / ${pet.weight} g",
+          ),
+        ],
       ),
     );
   }

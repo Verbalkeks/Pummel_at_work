@@ -82,15 +82,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const brunoTheDog = Pet(
-    //   id: "2",
-    //   name: "Bruno",
-    //   species: Species.dog,
-    //   weight: 320.0,
-    //   height: 60.0,
-    //   age: 4,
-    //   isFemale: false,
-    // );
+    const brunoTheDog = Pet(
+      id: "2",
+      name: "Bruno",
+      species: Species.dog,
+      weight: 320.0,
+      height: 60.0,
+      age: 4,
+      isFemale: false,
+    );
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: false,
       ),
-      home: const CreatePetScreen(),
+      home: const DetailPetScreen(pet: brunoTheDog),
     );
   }
 }

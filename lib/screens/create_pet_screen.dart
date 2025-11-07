@@ -24,146 +24,132 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
       appBar: AppBar(
         title: const Text("Neues Tier anlegen"),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Name",
-                  ),
-                  onChanged: (value) {
-                    currentName = value;
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Bitte einen Namen eingeben";
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Alter (Jahre)",
-                  ),
-                  onChanged: (value) {
-                    currentAge = int.tryParse(value);
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Bitte das Alter angeben";
-                    } else {
-                      if (int.tryParse(value) == null) {
-                        return "Bitte Zahl eingeben";
-                      }
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Höhe (cm)",
-                  ),
-                  onChanged: (value) {
-                    currentHeight = double.tryParse(value);
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Bitte die Höhe angeben";
-                    } else {
-                      if (int.tryParse(value) == null) {
-                        return "Bitte Zahl eingeben";
-                      }
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Gewicht (Gramm)",
-                  ),
-                  onChanged: (value) {
-                    currentWeight = double.tryParse(value);
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Bitte Gewicht angeben";
-                    } else {
-                      if (int.tryParse(value) == null) {
-                        return "Bitte Zahl eingeben";
-                      }
-                    }
-                    return null;
-                  },
-                ),
-                DropdownButtonFormField<Species>(
-                  hint: const Text("Bitte wählen Sie eine Spezies"),
-                  items: const [
-                    DropdownMenuItem(value: Species.dog, child: Text("Hund")),
-                    DropdownMenuItem(
-                      value: Species.cat,
-                      child: Text("Katze"),
-                    ),
-                    DropdownMenuItem(
-                      value: Species.fish,
-                      child: Text("Fisch"),
-                    ),
-                    DropdownMenuItem(
-                      value: Species.bird,
-                      child: Text("Vogel"),
-                    ),
-                  ],
-                  onChanged: (Species? value) {
-                    currentSpecies = value;
-                  },
-                  validator: (value) =>
-                      value == null ? "Bitte Spezies angeben" : null,
-                ),
-                CheckboxListTile(
-                  title: const Text("Weiblich"),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 0,
-                    vertical: 16,
-                  ),
-                  value: currentIsFemale,
-                  onChanged: (bool? value) {
-                    if (value != null) {
-                      print(value);
-                      setState(() {
-                        currentIsFemale = value;
-                      });
-                    }
-                  },
-                ),
-                CustomButton(
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      final pet = Pet(
-                        id: "test",
-                        name: currentName!,
-                        species: currentSpecies!,
-                        age: currentAge!,
-                        weight: currentWeight!,
-                        height: currentHeight!,
-                        isFemale: currentIsFemale,
-                      );
-                      print("$pet");
-                    }
-                  },
-                  label: "Speichern",
-                ),
-              ],
-            ),
+      body: _CreatePetFormular(),
+    );
+  }
+
+  SafeArea _CreatePetFormular() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              _CreatePetTextFormField(
+                  unitFullText: "Name",
+                  unitShortText: "",
+                  textInputType: TextInputType.text),
+              _CreatePetTextFormField(
+                  unitFullText: "Alter",
+                  unitShortText: "Jahre",
+                  textInputType: TextInputType.number),
+              _CreatePetTextFormField(
+                  unitFullText: "Höhe",
+                  unitShortText: "cm",
+                  textInputType: TextInputType.number),
+              _CreatePetTextFormField(
+                  unitFullText: "Gewicht",
+                  unitShortText: "g",
+                  textInputType: TextInputType.number),
+              _ChoseSpeciesDropdown(),
+              _IsFemaleCheckbox(),
+              _ValidateAndSubmitButton(),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  CustomButton _ValidateAndSubmitButton() {
+    return CustomButton(
+      onPressed: () {
+        if (_formKey.currentState?.validate() ?? false) {
+          final pet = Pet(
+            id: "test",
+            name: currentName!,
+            species: currentSpecies!,
+            age: currentAge!,
+            weight: currentWeight!,
+            height: currentHeight!,
+            isFemale: currentIsFemale,
+          );
+          print("$pet");
+        }
+      },
+      label: "Speichern",
+    );
+  }
+
+  CheckboxListTile _IsFemaleCheckbox() {
+    return CheckboxListTile(
+      title: const Text("Weiblich"),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 0,
+        vertical: 16,
+      ),
+      value: currentIsFemale,
+      onChanged: (bool? value) {
+        if (value != null) {
+          print(value);
+          setState(() {
+            currentIsFemale = value;
+          });
+        }
+      },
+    );
+  }
+
+  DropdownButtonFormField<Species> _ChoseSpeciesDropdown() {
+    return DropdownButtonFormField<Species>(
+      hint: const Text("Bitte wählen Sie eine Spezies"),
+      items: const [
+        DropdownMenuItem(value: Species.dog, child: Text("Hund")),
+        DropdownMenuItem(
+          value: Species.cat,
+          child: Text("Katze"),
+        ),
+        DropdownMenuItem(
+          value: Species.fish,
+          child: Text("Fisch"),
+        ),
+        DropdownMenuItem(
+          value: Species.bird,
+          child: Text("Vogel"),
+        ),
+      ],
+      onChanged: (Species? value) {
+        currentSpecies = value;
+      },
+      validator: (value) => value == null ? "Bitte Spezies angeben" : null,
+    );
+  }
+
+  TextFormField _CreatePetTextFormField({
+    required String unitFullText,
+    required String unitShortText,
+    required TextInputType textInputType,
+  }) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText:
+            "$unitFullText${unitShortText.isEmpty ? "" : " ($unitShortText)"}:",
+      ),
+      onChanged: (value) {
+        currentHeight = double.tryParse(value);
+      },
+      keyboardType: textInputType,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Bitte $unitFullText angeben";
+        } else if (textInputType == TextInputType.number) {
+          if (int.tryParse(value) == null) {
+            return "Bitte eine Zahl eingeben";
+          }
+        }
+        return null;
+      },
     );
   }
 }
