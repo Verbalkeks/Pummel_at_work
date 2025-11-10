@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
+import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
 
 class CreatePetScreen extends StatefulWidget {
@@ -31,7 +32,11 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   SafeArea _CreatePetFormular() {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: MediaQuery.of(context).orientation == Orientation.portrait
+            ? EdgeInsets.all(24)
+            : EdgeInsets.symmetric(
+                vertical: 40,
+                horizontal: MediaQuery.of(context).size.width / 5),
         child: Form(
           key: _formKey,
           child: Column(
@@ -76,6 +81,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
             isFemale: currentIsFemale,
           );
           print("$pet");
+          Navigator.pop(context);
         }
       },
       label: "Speichern",
@@ -132,21 +138,36 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     required TextInputType textInputType,
   }) {
     return TextFormField(
+      keyboardType: textInputType,
       decoration: InputDecoration(
         labelText:
             "$unitFullText${unitShortText.isEmpty ? "" : " ($unitShortText)"}:",
       ),
       onChanged: (value) {
-        currentHeight = double.tryParse(value);
+        setState(() {
+          switch (unitFullText) {
+            case "Name":
+              currentName = value;
+              break;
+            case "Alter":
+              currentAge = int.tryParse(value);
+              break;
+            case "Höhe":
+              currentHeight = double.tryParse(value);
+              break;
+            case "Gewicht":
+              currentWeight = double.tryParse(value);
+              break;
+          }
+        });
       },
-      keyboardType: textInputType,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "Bitte $unitFullText angeben";
-        } else if (textInputType == TextInputType.number) {
-          if (int.tryParse(value) == null) {
-            return "Bitte eine Zahl eingeben";
-          }
+        }
+        if (textInputType == TextInputType.number &&
+            double.tryParse(value) == null) {
+          return "Bitte eine gültige Zahl eingeben";
         }
         return null;
       },

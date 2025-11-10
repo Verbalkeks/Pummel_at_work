@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
 import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
+import 'package:pummel_the_fish/screens/create_pet_screen.dart';
+import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,8 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
           child: Image.asset("assets/images/pummel.png"),
@@ -51,14 +51,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 trailing: const Icon(
                   Icons.chevron_right_rounded,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    "/detail",
+                    arguments: pets[index],
+                  );
+                },
               );
             },
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, "/create");
+        },
         child: const Icon(Icons.add),
       ),
     );
