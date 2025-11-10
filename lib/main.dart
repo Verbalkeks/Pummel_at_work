@@ -91,6 +91,14 @@ class MyApp extends StatelessWidget {
       age: 4,
       isFemale: false,
     );
+    const leonieTheCat = Pet(
+      id: "3",
+      name: "Leonie",
+      species: Species.cat,
+      weight: 400.0,
+      height: 45.0,
+      age: 6,
+    );
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -98,7 +106,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: false,
       ),
-      home: const DetailPetScreen(pet: brunoTheDog),
+      home: const DetailPetScreen(pet: leonieTheCat),
     );
   }
 }

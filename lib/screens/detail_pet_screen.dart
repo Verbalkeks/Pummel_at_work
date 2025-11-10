@@ -12,6 +12,7 @@ class DetailPetScreen extends StatelessWidget {
         title: Text(pet.name),
       ),
       body: SafeArea(
+          child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Stack(
@@ -49,7 +50,7 @@ class DetailPetScreen extends StatelessWidget {
             _InfoCardsColumn(pet: pet),
           ],
         ),
-      ),
+      )),
     );
   }
 }
@@ -82,6 +83,19 @@ class _InfoCardsColumn extends StatelessWidget {
           _InfoCard(
             labelText: "Größe & Gewicht",
             infoText: "${pet.height} cm / ${pet.weight} g",
+          ),
+          _InfoCard(
+              labelText: "Geschlecht",
+              infoText: pet.isFemale ? "Weiblich" : "Männlich"),
+          _InfoCard(
+            labelText: "Spezies:",
+            infoText: pet.species == Species.dog
+                ? "Hund"
+                : pet.species == Species.bird
+                    ? "Vogel"
+                    : pet.species == Species.cat
+                        ? "Katze"
+                        : "Fisch",
           ),
         ],
       ),

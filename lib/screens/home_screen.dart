@@ -33,26 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("HomeScreen"),
       ),
       body: SafeArea(
-        child: ListView.builder(
-          padding: const EdgeInsets.all(20),
-          itemCount: pets.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: Icon(
-                pets[index].isFemale ? Icons.female : Icons.male,
-                color: const Color(0xFFFFC942),
-                size: 40,  
-              ),
-              title: Text(pets[index].name),
-              subtitle: Text(
-                "Alter: ${pets[index].age} Jahre ",
-              ),
-              trailing: const Icon(
-                Icons.chevron_right_rounded,
-              ),
-              onTap: () {},
-            );
-          },
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: ListView.builder(
+            itemCount: pets.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Icon(
+                  pets[index].isFemale ? Icons.female : Icons.male,
+                  color: const Color(0xFFFFC942),
+                  size: 40,
+                ),
+                title: Text(pets[index].name),
+                subtitle: Text(
+                  "Alter: ${pets[index].age} Jahre ",
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right_rounded,
+                ),
+                onTap: () {},
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
