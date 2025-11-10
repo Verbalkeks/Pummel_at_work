@@ -1,158 +1,148 @@
-import 'package:flutter/material.dart';
-import 'package:pummel_the_fish/data/models/pet.dart';
+import "package:flutter/material.dart";
+import "package:pummel_the_fish/data/models/pet.dart";
 
 class DetailPetScreen extends StatelessWidget {
-  final Pet pet;
-  const DetailPetScreen({super.key, required Pet this.pet});
+  // T3K14: Übung: DetailPetScreen mit Argumenten aufrufen
+  // Das Pet-Objekt wird nun nicht mehr direkt übergeben
+  // final Pet pet;
+
+  const DetailPetScreen({
+    super.key,
+    // Das Pet-Objekt wird nun nicht mehr direkt übergeben
+    // required this.pet,
+  });
 
   @override
   Widget build(BuildContext context) {
-  return PopScope(
-    canPop: false, // verhindert das automatische Zurückspringen
-    onPopInvokedWithResult: (didPop, result) {
-      if (!didPop) {
-        Navigator.pushNamed(context, "/home");
-      }
-    },
-    child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, "/home");
-          },
-          icon: const Icon(Icons.arrow_back),
+    // T3K14: Übung: DetailPetScreen mit Argumenten aufrufen
+    // Das Pet-Objekt wird durch die ModalRoute.of(context)!.settings.arguments bezogen
+    final pet = ModalRoute.of(context)!.settings.arguments as Pet;
+
+    return PopScope(
+  canPop: false, // verhindert automatisches Zurückspringen
+  onPopInvokedWithResult: (didPop, result) {
+    if (!didPop) {
+      Navigator.pushNamed(context, "/home");
+    }
+  },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamed(context, "/home");
+            },
+          ),
+          title: Text(pet.name),
         ),
-        title: Text(pet.name),
-      ),
-      body: SafeArea(
-        child: MediaQuery.of(context).orientation == Orientation.portrait
-            ? SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    _HeaderStack(pet: pet),
-                    _InfoCardsColumn(pet: pet),
-                  ],
-                ),
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Stack(
                 children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _HeaderStack(pet: pet),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: SingleChildScrollView(
-                      child: _InfoCardsColumn(pet: pet),
+                  // T3K13: Als Wenn-Dann-Verzweigung
+                  /* Image.asset(
+                  pet.species == Species.dog
+                      ? "assets/images/dog.png"
+                      : pet.species == Species.bird
+                          ? "assets/images/bird.png"
+                          : pet.species == Species.cat
+                              ? "assets/images/cat.png"
+                              : "assets/images/fish.png",
+                ), */
+                  // T3K14: Als Helper-Funktion
+                  _buildImage(pet.species),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      height: 40,
+                      color: const Color(0x88FFC942),
+                      child: const Center(
+                        child: Text(
+                          "Adoptier mich!",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-      ),
-    );
-    )
-    
-  }
-}
-
-class _HeaderStack extends StatelessWidget {
-  const _HeaderStack({
-    super.key,
-    required this.pet,
-  });
-
-  final Pet pet;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-          pet.species == Species.dog
-              ? "assets/images/dog.png"
-              : pet.species == Species.bird
-                  ? "assets/images/bird.png"
-                  : pet.species == Species.cat
-                      ? "assets/images/cat.png"
-                      : "assets/images/fish.png",
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            height: 40,
-            color: const Color.fromARGB(80, 82, 7, 129),
-            child: const Center(
-              child: Text(
-                "Adoptier mich!",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 40,
+                  horizontal: 24,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    _InfoCard(
+                      labelText: "Name des Kuscheltiers:",
+                      infoText: pet.name,
+                    ),
+                    _InfoCard(
+                      labelText: "Alter:",
+                      infoText: "${pet.age} Jahre",
+                    ),
+                    _InfoCard(
+                      labelText: "Gewicht:",
+                      infoText: "${pet.weight} gramm",
+                    ),
+                                        _InfoCard(
+                      labelText: "Größe:",
+                      infoText: "${pet.height} cm",
+                    ),
+                    _InfoCard(
+                      labelText: "Geschlecht:",
+                      infoText: pet.isFemale ? "Weiblich" : "Männlich",
+                    ),
+                    _InfoCard(
+                      labelText: "Spezies:",
+                      infoText: pet.species == Species.dog
+                          ? "Hund"
+                          : pet.species == Species.bird
+                              ? "Vogel"
+                              : pet.species == Species.cat
+                                  ? "Katze"
+                                  : "Fisch",
+                    ),
+                  ],
                 ),
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
-}
 
-class _InfoCardsColumn extends StatelessWidget {
-  const _InfoCardsColumn({
-    super.key,
-    required this.pet,
-  });
-
-  final Pet pet;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 40,
-        horizontal: 24,
-      ),
-      child: Column(
-        children: [
-          _InfoCard(
-            labelText: "Name des Kuscheltiers: ",
-            infoText: pet.name,
-          ),
-          _InfoCard(
-            labelText: "Alter:",
-            infoText: "${pet.age}",
-          ),
-          _InfoCard(
-            labelText: "Größe & Gewicht",
-            infoText: "${pet.height} cm / ${pet.weight} g",
-          ),
-          _InfoCard(
-              labelText: "Geschlecht",
-              infoText: pet.isFemale ? "Weiblich" : "Männlich"),
-          _InfoCard(
-            labelText: "Spezies:",
-            infoText: pet.species == Species.dog
-                ? "Hund"
-                : pet.species == Species.bird
-                    ? "Vogel"
-                    : pet.species == Species.cat
-                        ? "Katze"
-                        : "Fisch",
-          ),
-        ],
-      ),
-    );
+  // T3K13: Als Helper-Funktion
+  Widget _buildImage(Species species) {
+    switch (species) {
+      case Species.dog:
+        return Image.asset("assets/images/dog.png");
+      case Species.bird:
+        return Image.asset("assets/images/bird.png");
+      case Species.cat:
+        return Image.asset("assets/images/cat.png");
+      case Species.fish:
+        return Image.asset("assets/images/fish.png");
+    }
   }
 }
 
 class _InfoCard extends StatelessWidget {
   final String labelText;
   final String infoText;
-  const _InfoCard({super.key, required this.labelText, required this.infoText});
+
+  const _InfoCard({
+    required this.labelText,
+    required this.infoText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +153,7 @@ class _InfoCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(labelText),
-            Expanded(
-              child: Text(
-                infoText,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.fade,
-              ),
-            ),
+            Text(infoText),
           ],
         ),
       ),

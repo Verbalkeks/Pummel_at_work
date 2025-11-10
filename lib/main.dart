@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
         if (settings.name == "/detail") {
           final pet = settings.arguments as Pet;
           return MaterialPageRoute(
-            builder: (context) => DetailPetScreen(pet: pet),
+            builder: (context) => const DetailPetScreen(),
+            settings:
+                settings, // 🔥 wichtig, damit arguments weitergegeben werden
           );
         }
         return null;
