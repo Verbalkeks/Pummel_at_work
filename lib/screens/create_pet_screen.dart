@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
@@ -111,18 +114,21 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     return DropdownButtonFormField<Species>(
       hint: const Text("Bitte wählen Sie eine Spezies"),
       items: const [
-        DropdownMenuItem(value: Species.dog, child: Text("Hund")),
+        DropdownMenuItem(
+          value: Species.dog,
+          child: FaIcon(FontAwesomeIcons.dog)
+        ),
         DropdownMenuItem(
           value: Species.cat,
-          child: Text("Katze"),
+          child: FaIcon(FontAwesomeIcons.cat),
         ),
         DropdownMenuItem(
           value: Species.fish,
-          child: Text("Fisch"),
+          child: FaIcon(FontAwesomeIcons.fish),
         ),
         DropdownMenuItem(
           value: Species.bird,
-          child: Text("Vogel"),
+          child: FaIcon(FontAwesomeIcons.earlybirds),
         ),
       ],
       onChanged: (Species? value) {

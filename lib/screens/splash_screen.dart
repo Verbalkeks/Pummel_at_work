@@ -1,6 +1,7 @@
 import "dart:async";
 import "package:flutter/material.dart";
 import "package:pummel_the_fish/screens/home_screen.dart";
+import "package:pummel_the_fish/theme/custom_colors.dart";
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -20,7 +21,7 @@ class SplashScreen extends StatelessWidget {
           ),
         ),
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: CustomColors.blueLight,
     );
   }
 }

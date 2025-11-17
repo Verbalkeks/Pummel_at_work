@@ -19,12 +19,12 @@ class DetailPetScreen extends StatelessWidget {
     final pet = ModalRoute.of(context)!.settings.arguments as Pet;
 
     return PopScope(
-  canPop: false, // verhindert automatisches Zurückspringen
-  onPopInvokedWithResult: (didPop, result) {
-    if (!didPop) {
-      Navigator.pushNamed(context, "/home");
-    }
-  },
+      canPop: false, // verhindert automatisches Zurückspringen
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, "/home");
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -36,87 +36,68 @@ class DetailPetScreen extends StatelessWidget {
           title: Text(pet.name),
         ),
         body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  // T3K13: Als Wenn-Dann-Verzweigung
-                  /* Image.asset(
-                  pet.species == Species.dog
-                      ? "assets/images/dog.png"
-                      : pet.species == Species.bird
-                          ? "assets/images/bird.png"
-                          : pet.species == Species.cat
-                              ? "assets/images/cat.png"
-                              : "assets/images/fish.png",
-                ), */
-                  // T3K14: Als Helper-Funktion
-                  _buildImage(pet.species),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: 40,
-                      color: const Color(0x88FFC942),
-                      child: const Center(
-                        child: Text(
-                          "Adoptier mich!",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth > 600; // Landscape / Tablet
+
+              if (isWide) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: _BuildImageStack(pet),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _InfoCardsColumn(
+                        pet: pet,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 40,
-                  horizontal: 24,
-                ),
+                  ],
+                );
+              }
+
+              // VERTICAL → Standard Layout
+              return SingleChildScrollView(
                 child: Column(
-                  children: <Widget>[
-                    _InfoCard(
-                      labelText: "Name des Kuscheltiers:",
-                      infoText: pet.name,
-                    ),
-                    _InfoCard(
-                      labelText: "Alter:",
-                      infoText: "${pet.age} Jahre",
-                    ),
-                    _InfoCard(
-                      labelText: "Gewicht:",
-                      infoText: "${pet.weight} gramm",
-                    ),
-                                        _InfoCard(
-                      labelText: "Größe:",
-                      infoText: "${pet.height} cm",
-                    ),
-                    _InfoCard(
-                      labelText: "Geschlecht:",
-                      infoText: pet.isFemale ? "Weiblich" : "Männlich",
-                    ),
-                    _InfoCard(
-                      labelText: "Spezies:",
-                      infoText: pet.species == Species.dog
-                          ? "Hund"
-                          : pet.species == Species.bird
-                              ? "Vogel"
-                              : pet.species == Species.cat
-                                  ? "Katze"
-                                  : "Fisch",
-                    ),
+                  children: [
+                    _BuildImageStack(pet),
+                    _InfoCardsColumn(pet: pet),
                   ],
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
+    );
+  }
+
+  Stack _BuildImageStack(Pet pet) {
+    return Stack(
+      children: [
+        _buildImage(pet.species),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            height: 40,
+            color: const Color(0x88FFC942),
+            child: const Center(
+              child: Text(
+                "Adoptier mich!",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -132,6 +113,40 @@ class DetailPetScreen extends StatelessWidget {
       case Species.fish:
         return Image.asset("assets/images/fish.png");
     }
+  }
+}
+
+class _InfoCardsColumn extends StatelessWidget {
+  const _InfoCardsColumn({
+    super.key,
+    required this.pet,
+  });
+
+  final Pet pet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children: <Widget>[
+          _InfoCard(labelText: "Name des Kuscheltiers:", infoText: pet.name),
+          _InfoCard(labelText: "Alter:", infoText: "${pet.age} Jahre"),
+          _InfoCard(labelText: "Gewicht:", infoText: "${pet.weight} gramm"),
+          _InfoCard(labelText: "Größe:", infoText: "${pet.height} cm"),
+          _InfoCard(
+              labelText: "Geschlecht:",
+              infoText: pet.isFemale ? "Weiblich" : "Männlich"),
+          _InfoCard(
+            labelText: "Spezies:",
+            infoText: pet.species == Species.dog
+                ? "Hund"
+                : pet.species == Species.bird
+                    ? "Vogel"
+                    : pet.species == Species.cat
+                        ? "Katze"
+                        : "Fisch",
+          ),
+        ],
+    );
   }
 }
 
