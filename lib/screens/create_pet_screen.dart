@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
+import 'package:pummel_the_fish/theme/custom_colors.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
@@ -93,7 +92,10 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
 
   CheckboxListTile _IsFemaleCheckbox() {
     return CheckboxListTile(
-      title: const Text("Weiblich"),
+      title: Text(
+        "Weiblich",
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 0,
         vertical: 16,
@@ -111,24 +113,37 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   }
 
   DropdownButtonFormField<Species> _ChoseSpeciesDropdown() {
+    TextStyle bodyLarge = Theme.of(context).textTheme.bodyLarge!;
     return DropdownButtonFormField<Species>(
-      hint: const Text("Bitte wählen Sie eine Spezies"),
-      items: const [
+      hint: Text("Bitte wählen Sie eine Spezies",
+          style: bodyLarge),
+      items: [
         DropdownMenuItem(
-          value: Species.dog,
-          child: FaIcon(FontAwesomeIcons.dog)
-        ),
+            value: Species.dog,
+            child: Text(
+              "${const FaIcon(FontAwesomeIcons.dog)} Hund",
+              style: bodyLarge.copyWith(color: CustomColors.blueMedium),
+            )),
         DropdownMenuItem(
           value: Species.cat,
-          child: FaIcon(FontAwesomeIcons.cat),
+          child: Text(
+            "${const FaIcon(FontAwesomeIcons.cat)} Katze",
+            style: bodyLarge.copyWith(color: CustomColors.blueMedium),
+          ),
         ),
         DropdownMenuItem(
           value: Species.fish,
-          child: FaIcon(FontAwesomeIcons.fish),
+          child: Text(
+            "${const FaIcon(FontAwesomeIcons.fish)} Fisch",
+            style: bodyLarge.copyWith(color: CustomColors.blueMedium),
+          ),
         ),
         DropdownMenuItem(
           value: Species.bird,
-          child: FaIcon(FontAwesomeIcons.earlybirds),
+          child: Text(
+            "${const FaIcon(FontAwesomeIcons.earlybirds)} Vogel",
+            style: bodyLarge.copyWith(color: CustomColors.blueMedium),
+          ),
         ),
       ],
       onChanged: (Species? value) {
@@ -144,6 +159,10 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     required TextInputType textInputType,
   }) {
     return TextFormField(
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge!
+          .copyWith(color: CustomColors.blueMedium),
       keyboardType: textInputType,
       decoration: InputDecoration(
         labelText:

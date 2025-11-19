@@ -42,7 +42,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pummel The Fish',
       theme: ThemeData(
-        useMaterial3: false,
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: CustomColors.blueLight,
+          foregroundColor: CustomColors.white,
+        ),
         colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: CustomColors.blueDark,
@@ -51,8 +55,8 @@ class MyApp extends StatelessWidget {
           onSecondary: CustomColors.white,
           error: CustomColors.red,
           onError: CustomColors.white,
-          surface: CustomColors.blueLight,
-          onSurface: CustomColors.white,
+          surface: CustomColors.white,
+          onSurface: CustomColors.blueLight,
         ),
         
         inputDecorationTheme: const InputDecorationTheme(
@@ -107,7 +111,7 @@ class MyApp extends StatelessWidget {
             fontFamily: "Titillium Web",
             fontWeight: FontWeight.w700,
             fontSize: 14,
-            color: CustomColors.white,
+            color: CustomColors.blueDark,
           ),
           bodySmall: TextStyle(
             fontFamily: "Titillium Web",

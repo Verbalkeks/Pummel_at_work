@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:pummel_the_fish/data/models/pet.dart";
+import "package:pummel_the_fish/theme/custom_colors.dart";
 
 class DetailPetScreen extends StatelessWidget {
   // T3K14: Übung: DetailPetScreen mit Argumenten aufrufen
@@ -46,7 +47,7 @@ class DetailPetScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: _BuildImageStack(pet),
+                      child: _BuildImageStack(pet, context),
                     ),
                     Expanded(
                       flex: 1,
@@ -62,7 +63,7 @@ class DetailPetScreen extends StatelessWidget {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    _BuildImageStack(pet),
+                    _BuildImageStack(pet, context),
                     _InfoCardsColumn(pet: pet),
                   ],
                 ),
@@ -74,7 +75,7 @@ class DetailPetScreen extends StatelessWidget {
     );
   }
 
-  Stack _BuildImageStack(Pet pet) {
+  Stack _BuildImageStack(Pet pet, BuildContext context) {
     return Stack(
       children: [
         _buildImage(pet.species),
@@ -84,19 +85,15 @@ class DetailPetScreen extends StatelessWidget {
           bottom: 0,
           child: Container(
             height: 40,
-            color: const Color(0x88FFC942),
-            child: const Center(
+            color: CustomColors.orangeTransparent,
+            child: Center(
               child: Text(
                 "Adoptier mich!",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                style: Theme.of(context).textTheme.headlineLarge
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -126,26 +123,28 @@ class _InfoCardsColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: <Widget>[
-          _InfoCard(labelText: "Name des Kuscheltiers:", infoText: pet.name),
-          _InfoCard(labelText: "Alter:", infoText: "${pet.age} Jahre"),
-          _InfoCard(labelText: "Gewicht:", infoText: "${pet.weight} gramm"),
-          _InfoCard(labelText: "Größe:", infoText: "${pet.height} cm"),
-          _InfoCard(
-              labelText: "Geschlecht:",
-              infoText: pet.isFemale ? "Weiblich" : "Männlich"),
-          _InfoCard(
-            labelText: "Spezies:",
-            infoText: pet.species == Species.dog
-                ? "Hund"
-                : pet.species == Species.bird
-                    ? "Vogel"
-                    : pet.species == Species.cat
-                        ? "Katze"
-                        : "Fisch",
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Column(
+          children: <Widget>[
+            _InfoCard(labelText: "Name des Kuscheltiers:", infoText: pet.name),
+            _InfoCard(labelText: "Alter:", infoText: "${pet.age} Jahre"),
+            _InfoCard(labelText: "Gewicht:", infoText: "${pet.weight} gramm"),
+            _InfoCard(labelText: "Größe:", infoText: "${pet.height} cm"),
+            _InfoCard(
+                labelText: "Geschlecht:",
+                infoText: pet.isFemale ? "Weiblich" : "Männlich"),
+            _InfoCard(
+              labelText: "Spezies:",
+              infoText: pet.species == Species.dog
+                  ? "Hund"
+                  : pet.species == Species.bird
+                      ? "Vogel"
+                      : pet.species == Species.cat
+                          ? "Katze"
+                          : "Fisch",
+            ),
+          ],
+      ),
     );
   }
 }
@@ -167,8 +166,8 @@ class _InfoCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(labelText),
-            Text(infoText),
+            Text(labelText, style: Theme.of(context).textTheme.bodyMedium),
+            Text(infoText, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
       ),
