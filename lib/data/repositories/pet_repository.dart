@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:pummel_the_fish/data/models/pet.dart';
 
 /// Diese abstrakte Klasse dient als Schablone
@@ -5,9 +7,9 @@ import 'package:pummel_the_fish/data/models/pet.dart';
 /// FirebasePetRepository. Alle Methoden müssen beim
 /// Verwenden dieser Schablone mit @override überschrieben werden
 abstract class PetRepository {
-  Pet? getPetById(String id);
-  List<Pet> getAllPets();
-  void addPet(Pet pet);
-  void deletePetById(String id);
-  void updatePet(Pet pet);
+  FutureOr<Pet?> getPetById(String id);
+  FutureOr<List<Pet>> getAllPets();
+  FutureOr<void> addPet(Pet pet);
+  FutureOr<void> deletePetById(String id);
+  FutureOr<void> updatePet(Pet pet);
 }
