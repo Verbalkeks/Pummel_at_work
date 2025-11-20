@@ -6,6 +6,7 @@ import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/screens/splash_screen.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
+import 'package:flutter/material.dart';
 
 // class ExampleWidget extends StatelessWidget {
 //   const ExampleWidget({super.key});

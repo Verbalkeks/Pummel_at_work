@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Owner {
   final String id;
   final String name;
@@ -7,5 +9,12 @@ class Owner {
       id: map["id"],
       name: map["name"],
     );
+  }
+  String toJson() => jsonEncode(toMap());
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+    result.addAll({"id": id});
+    result.addAll({"name": name});
+    return result;
   }
 }

@@ -29,14 +29,30 @@ class Pet {
 
   factory Pet.fromMap(Map<String, dynamic> map) {
     return Pet(
-        id: map["id"],
-        name: map["name"],
-        species: Species.values[map["species"]],
-        age: map["age"] as int,
-        weight: map["weight"]as double,
-        height: map["height"]as double,
-        isFemale: map["is_female"],
-        owner: map["owner"] != null ? Owner.fromMap(map["owner"]) : null,
+      id: map["id"],
+      name: map["name"],
+      species: Species.values[map["species"]],
+      age: map["age_in_years"].toInt(),
+      weight: map["weight"].toDouble(),
+      height: map["height"].toDouble(),
+      isFemale: map["is_female"],
+      owner: map["owner"] != null ? Owner.fromMap(map["owner"]) : null,
     );
+  }
+
+  String toJson() => jsonEncode(toMap());
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+    result.addAll({"id": id});
+    result.addAll({"name": name});
+    result.addAll({"species": species.index});
+    result.addAll({"age_in_years": age});
+    result.addAll({"weight": weight});
+    result.addAll({"height": height});
+    result.addAll({"is_female": isFemale});
+    if (owner != null) {
+      result.addAll({"owner": owner!.toMap()});
+    }
+    return result;
   }
 }

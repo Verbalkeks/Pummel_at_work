@@ -13,9 +13,23 @@ class RestPetRepository implements PetRepository {
   RestPetRepository({required this.httpClient});
 
   @override
-  void addPet(Pet pet) {
-    // TODO: Pet an den Server senden und dort speichern
-    throw UnimplementedError();
+  Future<void> addPet(Pet pet) async {
+    final uri = Uri.parse("$baseUrl/pets");
+
+    final response = await httpClient.post(
+      uri,
+      body: pet.toJson(),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 201) {
+      print("Kuscheltier erfolgreich hinzugefügt");
+      return;
+    } else {
+      throw Exception("Beim Hinzufügen des Kuscheltiers ging etwas schief");
+    }
   }
 
   @override
@@ -24,8 +38,8 @@ class RestPetRepository implements PetRepository {
     final response = await httpClient.get(uri);
     if (response.statusCode == 200) {
       final List<dynamic> dataList = jsonDecode(response.body);
-      print(dataList);
-      throw UnimplementedError();
+      final petList = dataList.map((petMap) => Pet.fromMap(petMap)).toList();
+      return petList;
     } else {
       throw Exception(
         "Beim Laden der Kuscheltiere ging etwas schief.",
@@ -34,9 +48,17 @@ class RestPetRepository implements PetRepository {
   }
 
   @override
-  Pet? getPetById(String id) {
-    // TODO: ein bestimmtes Pet abrufen
-    throw UnimplementedError();
+  Future<Pet?> getPetById(String id) async {
+    final uri = Uri.parse("$baseUrl/pets/${id != null ? id : 0}");
+    final response = await httpClient.get(uri);
+    if (response.statusCode == 200) {
+      final dynamic petData = jsonDecode(response.body);
+      final Pet pet = Pet.fromMap(petData);
+      print(pet.toString());
+      return pet;
+    } else {
+      throw Exception("Kuscheltier nicht gefunden");
+    }
   }
 
   @override
