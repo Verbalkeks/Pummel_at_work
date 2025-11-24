@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
 
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
@@ -49,26 +50,35 @@ class RestPetRepository implements PetRepository {
 
   @override
   Future<Pet?> getPetById(String id) async {
-    final uri = Uri.parse("$baseUrl/pets/${id != null ? id : 0}");
+    final uri = Uri.parse("$baseUrl/pets/$id");
     final response = await httpClient.get(uri);
     if (response.statusCode == 200) {
-      final dynamic petData = jsonDecode(response.body);
-      final Pet pet = Pet.fromMap(petData);
-      print(pet.toString());
-      return pet;
+      final dynamic data = jsonDecode(response.body);
+      return Pet.fromMap(data);
     } else {
       throw Exception("Kuscheltier nicht gefunden");
     }
   }
 
   @override
-  void updatePet(Pet pet) {
-    // TODO: existierendes Pet auf dem Server aktualisieren
-    throw UnimplementedError();
+  Future<void> updatePet(Pet pet) async {
+    final uri = Uri.parse("$baseUrl/pets/${pet.id}");
+    final response = await httpClient.put(
+      uri,
+      body: pet.toJson(),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      print("Kuscheltier erfolgreich aktualisiert.");
+    } else {
+      throw Exception("Beim Aktualisieren des Pets ging etwas schief");
+    }
   }
 
   @override
-  void deletePetById(String id) {
+  Future<void> deletePetById(String id) async {
     // TODO: existierendes Pet auf dem Server löschen
     throw UnimplementedError();
   }
