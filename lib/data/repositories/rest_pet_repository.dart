@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
-
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
 import 'package:http/http.dart' as http;
@@ -72,6 +69,7 @@ class RestPetRepository implements PetRepository {
     );
     if (response.statusCode == 200) {
       print("Kuscheltier erfolgreich aktualisiert.");
+      return;
     } else {
       throw Exception("Beim Aktualisieren des Pets ging etwas schief");
     }
@@ -79,7 +77,13 @@ class RestPetRepository implements PetRepository {
 
   @override
   Future<void> deletePetById(String id) async {
-    // TODO: existierendes Pet auf dem Server löschen
-    throw UnimplementedError();
+    final uri = Uri.parse("$baseUrl/pets/${id}");
+    final response = await httpClient.delete(uri);
+    if (response.statusCode == 204) {
+      print("GoodBye Kuscheltier.");
+      return;
+    } else {
+      throw Exception("Beim Löschen des Kuscheltiers ging etwas schief");
+    }
   }
 }

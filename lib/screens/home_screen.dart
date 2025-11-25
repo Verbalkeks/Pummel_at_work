@@ -9,6 +9,9 @@ import 'package:pummel_the_fish/data/repositories/rest_pet_repository.dart';
 import 'package:pummel_the_fish/screens/create_pet_screen.dart';
 import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
+import 'package:pummel_the_fish/widgets/pet_list_error.dart';
+import 'package:pummel_the_fish/widgets/pet_list_loaded.dart';
+import 'package:pummel_the_fish/widgets/pet_list_loading.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,13 +21,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final petRepository = FakePetRepository();
-  List<Pet> pets = [];
+  late final RestPetRepository restPetRepository;
+  late Future<List<Pet>> pets;
 
   @override
   void initState() {
     super.initState();
-    pets = petRepository.getAllPets();
+    final httpClient = http.Client();
+    restPetRepository = RestPetRepository(
+      httpClient: httpClient,
+    );
+
+    pets = restPetRepository.getAllPets();
   }
 
   @override
@@ -44,57 +52,45 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: ListView.builder(
-            itemCount: pets.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Icon(
-                  pets[index].isFemale ? Icons.female : Icons.male,
-                  color: CustomColors.orange,
-                  size: 40,
-                ),
-                title: Text(
-                  pets[index].name,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "Alter: ${pets[index].age} Jahre ",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                trailing: const Icon(
-                  Icons.chevron_right_rounded,
-                  color: CustomColors.blueMedium,
-                ),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/detail",
-                    arguments: pets[index],
-                  );
-                },
-              );
+          child: FutureBuilder<List<Pet>>(
+            initialData: const [],
+            future: pets,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                case ConnectionState.active:
+                  return const PetListLoading();
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    return PetListLoaded(pets: snapshot.data!);
+                  } else {
+                    return const PetListError(
+                      message: "Fehler beim Laden der Tiere",
+                    );
+                  }
+              }
             },
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/create");
+        onPressed: () async {
+          await Navigator.pushNamed(context, "/create");
+          setState(() {
+            pets = restPetRepository.getAllPets();
+          });
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> _getAllPets() async {
+  Future<List<Pet>> _getAllPets() async {
     final httpClient = http.Client();
     final restPetRepository = RestPetRepository(httpClient: httpClient);
     final pets = await restPetRepository.getAllPets();
-    for (Pet pet in pets) {
-      final data = await restPetRepository.getPetById(pet.id);
-      print(data.toString());
-      await Future.delayed(const Duration(milliseconds: 1500));
-    }
+    return pets;
   }
 
   Future<void> _addNewPet() async {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:pummel_the_fish/data/models/pet.dart';
-import 'package:pummel_the_fish/screens/home_screen.dart';
+import 'package:pummel_the_fish/data/repositories/rest_pet_repository.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
-
   @override
   State<CreatePetScreen> createState() => _CreatePetScreenState();
 }
@@ -20,6 +20,14 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   double? currentHeight;
   double? currentWeight;
   Species? currentSpecies;
+  late final RestPetRepository restPetRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    final httpClient = http.Client();
+    restPetRepository = RestPetRepository(httpClient: httpClient);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,23 +79,47 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
 
   CustomButton _ValidateAndSubmitButton() {
     return CustomButton(
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          final pet = Pet(
-            id: "test",
-            name: currentName!,
-            species: currentSpecies!,
-            age: currentAge!,
-            weight: currentWeight!,
-            height: currentHeight!,
-            isFemale: currentIsFemale,
-          );
-          print("$pet");
-          Navigator.pop(context);
-        }
-      },
+      onPressed: _addPet,
       label: "Speichern",
     );
+  }
+
+  Future<void> _addPet() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final pet = Pet(
+        id: "test",
+        name: currentName!,
+        species: currentSpecies!,
+        age: currentAge!,
+        weight: currentWeight!,
+        height: currentHeight!,
+        isFemale: currentIsFemale,
+      );
+      try {
+        await restPetRepository.addPet(pet);
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: CustomColors.blueDark,
+            content: Text(
+              "Kuscheltier erfolgreich hinzugefügt",
+            ),
+          ),
+        );
+      } on Exception {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: CustomColors.red,
+            content: Text(
+              "Fehler beim Hinzufügen des Kuscheltiers",
+            ),
+          ),
+        );
+      }
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
   }
 
   CheckboxListTile _IsFemaleCheckbox() {
@@ -115,33 +147,32 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   DropdownButtonFormField<Species> _ChoseSpeciesDropdown() {
     TextStyle bodyLarge = Theme.of(context).textTheme.bodyLarge!;
     return DropdownButtonFormField<Species>(
-      hint: Text("Bitte wählen Sie eine Spezies",
-          style: bodyLarge),
+      hint: Text("Wählen Sie eine Spezies", style: bodyLarge),
       items: [
         DropdownMenuItem(
             value: Species.dog,
             child: Text(
-              "${const FaIcon(FontAwesomeIcons.dog)} Hund",
+              "Hund",
               style: bodyLarge.copyWith(color: CustomColors.blueMedium),
             )),
         DropdownMenuItem(
           value: Species.cat,
           child: Text(
-            "${const FaIcon(FontAwesomeIcons.cat)} Katze",
+            "Katze",
             style: bodyLarge.copyWith(color: CustomColors.blueMedium),
           ),
         ),
         DropdownMenuItem(
           value: Species.fish,
           child: Text(
-            "${const FaIcon(FontAwesomeIcons.fish)} Fisch",
+            "Fisch",
             style: bodyLarge.copyWith(color: CustomColors.blueMedium),
           ),
         ),
         DropdownMenuItem(
           value: Species.bird,
           child: Text(
-            "${const FaIcon(FontAwesomeIcons.earlybirds)} Vogel",
+            "Vogel",
             style: bodyLarge.copyWith(color: CustomColors.blueMedium),
           ),
         ),
