@@ -6,6 +6,8 @@ import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/screens/splash_screen.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
+import "package:pummel_the_fish/firebase_options.dart";
 
 // class ExampleWidget extends StatelessWidget {
 //   const ExampleWidget({super.key});
@@ -29,7 +31,11 @@ import 'package:pummel_the_fish/theme/custom_colors.dart';
 // }
 
 Future<void> main() async {
-  // T2K7: Futures, async und await
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -57,7 +63,6 @@ class MyApp extends StatelessWidget {
           surface: CustomColors.white,
           onSurface: CustomColors.blueLight,
         ),
-        
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(
             fontFamily: "Titillium Web",

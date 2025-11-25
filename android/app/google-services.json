@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "220717287024",
+    "project_id": "pummel-at-work",
+    "storage_bucket": "pummel-at-work.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220717287024:android:0994ab7fe822ec150696b5",
+        "android_client_info": {
+          "package_name": "com.example.pummel_the_fish"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0JYEYE-MtAKG8l-9J6TUj56kmOY0eEWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
