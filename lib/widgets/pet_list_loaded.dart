@@ -33,11 +33,14 @@ class PetListLoaded extends StatelessWidget {
             Icons.chevron_right_rounded,
             color: CustomColors.blueMedium,
           ),
-          onTap: () {
-            Navigator.pushNamed(
+          onTap: () async {
+            Navigator.push(
               context,
-              "/detail",
-              arguments: pets[index],
+              MaterialPageRoute(
+                builder: (context) => DetailPetScreen(
+                  pet: pets[index],
+                ),
+              ),
             );
           },
         );

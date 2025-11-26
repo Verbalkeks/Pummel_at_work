@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'pummel-at-work.firebasestorage.app',
     iosBundleId: 'com.example.pummelTheFish',
   );
+
 }

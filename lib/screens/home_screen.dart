@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
+import 'package:pummel_the_fish/data/repositories/firestore_pet_repository.dart';
 import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
 import 'package:pummel_the_fish/data/repositories/rest_pet_repository.dart';
 import 'package:pummel_the_fish/screens/create_pet_screen.dart';
@@ -21,18 +23,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final RestPetRepository restPetRepository;
+  late final FirestorePetRepository firestorePetRepository;
   late Future<List<Pet>> pets;
 
   @override
   void initState() {
     super.initState();
     final httpClient = http.Client();
-    restPetRepository = RestPetRepository(
-      httpClient: httpClient,
+    firestorePetRepository = FirestorePetRepository(
+      firestore: FirebaseFirestore.instance
     );
 
-    pets = restPetRepository.getAllPets();
+    pets = firestorePetRepository.getAllPets();
   }
 
   @override
@@ -44,10 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Image.asset("assets/images/pummel.png"),
         ),
         title: const Text("Pummel The Fish"),
-        actions: [
-          IconButton(
-              onPressed: () => _addNewPet(), icon: const Icon(Icons.add)),
-        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -78,33 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () async {
           await Navigator.pushNamed(context, "/create");
           setState(() {
-            pets = restPetRepository.getAllPets();
+            pets = firestorePetRepository.getAllPets();
           });
         },
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  Future<List<Pet>> _getAllPets() async {
-    final httpClient = http.Client();
-    final restPetRepository = RestPetRepository(httpClient: httpClient);
-    final pets = await restPetRepository.getAllPets();
-    return pets;
-  }
-
-  Future<void> _addNewPet() async {
-    final httpClient = http.Client();
-    final restPetRepository = RestPetRepository(httpClient: httpClient);
-    const keksTheDog = Pet(
-      id: "612",
-      name: "Keks",
-      species: Species.dog,
-      weight: 250.0,
-      height: 45.0,
-      age: 10,
-    );
-
-    await restPetRepository.addPet(keksTheDog);
   }
 }

@@ -131,16 +131,6 @@ class MyApp extends StatelessWidget {
         "/home": (context) => const HomeScreen(),
         "/create": (context) => const CreatePetScreen(),
       },
-      onGenerateRoute: (settings) {
-        if (settings.name == "/detail") {
-          final pet = settings.arguments as Pet;
-          return MaterialPageRoute(
-            builder: (context) => const DetailPetScreen(),
-            settings: settings, // wichtig, damit arguments weitergegeben werden
-          );
-        }
-        return null;
-      },
     );
   }
 }

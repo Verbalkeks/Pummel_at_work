@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:pummel_the_fish/data/models/pet.dart';
-import 'package:pummel_the_fish/data/repositories/rest_pet_repository.dart';
+import 'package:pummel_the_fish/data/repositories/firestore_pet_repository.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
@@ -20,13 +19,12 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   double? currentHeight;
   double? currentWeight;
   Species? currentSpecies;
-  late final RestPetRepository restPetRepository;
+  late final FirestorePetRepository firestorePetRepository;
 
   @override
   void initState() {
     super.initState();
-    final httpClient = http.Client();
-    restPetRepository = RestPetRepository(httpClient: httpClient);
+    firestorePetRepository = FirestorePetRepository(firestore: FirebaseFirestore.instance);
   }
 
   @override
@@ -96,7 +94,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
         isFemale: currentIsFemale,
       );
       try {
-        await restPetRepository.addPet(pet);
+        await firestorePetRepository.addPet(pet);
 
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
