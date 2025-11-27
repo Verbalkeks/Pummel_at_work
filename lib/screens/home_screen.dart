@@ -1,19 +1,10 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:pummel_the_fish/data/models/pet.dart';
-import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
-import 'package:pummel_the_fish/data/repositories/firestore_pet_repository.dart';
-import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
-import 'package:pummel_the_fish/data/repositories/rest_pet_repository.dart';
-import 'package:pummel_the_fish/screens/create_pet_screen.dart';
-import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
-import 'package:pummel_the_fish/theme/custom_colors.dart';
-import 'package:pummel_the_fish/widgets/pet_list_error.dart';
-import 'package:pummel_the_fish/widgets/pet_list_loaded.dart';
-import 'package:pummel_the_fish/widgets/pet_list_loading.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
+import "package:pummel_the_fish/data/models/pet.dart";
+import "package:pummel_the_fish/data/repositories/firestore_pet_repository.dart";
+import "package:pummel_the_fish/widgets/pet_list_error.dart";
+import "package:pummel_the_fish/widgets/pet_list_loaded.dart";
+import "package:pummel_the_fish/widgets/pet_list_loading.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,17 +15,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final FirestorePetRepository firestorePetRepository;
-  late Future<List<Pet>> pets;
+
+  late Stream<List<Pet>> petStream;
 
   @override
   void initState() {
     super.initState();
-    final httpClient = http.Client();
     firestorePetRepository = FirestorePetRepository(
-      firestore: FirebaseFirestore.instance
+      firestore: FirebaseFirestore.instance,
     );
 
-    pets = firestorePetRepository.getAllPets();
+    petStream = firestorePetRepository.getPetsStream();
   }
 
   @override
@@ -50,21 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: FutureBuilder<List<Pet>>(
+          child: StreamBuilder<List<Pet>>(
+            stream: petStream,
             initialData: const [],
-            future: pets,
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
-                case ConnectionState.active:
                   return const PetListLoading();
+                case ConnectionState.active:
                 case ConnectionState.done:
                   if (snapshot.hasData) {
                     return PetListLoaded(pets: snapshot.data!);
                   } else {
                     return const PetListError(
-                      message: "Fehler beim Laden der Tiere",
+                      message: "Fehler beim Laden der Kuscheltiere",
                     );
                   }
               }
@@ -73,11 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.pushNamed(context, "/create");
-          setState(() {
-            pets = firestorePetRepository.getAllPets();
-          });
+        onPressed: () {
+          Navigator.pushNamed(context, "/create");
         },
         child: const Icon(Icons.add),
       ),

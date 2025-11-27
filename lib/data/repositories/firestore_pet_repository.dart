@@ -1,22 +1,28 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pummel_the_fish/data/models/pet.dart';
-import 'package:pummel_the_fish/data/repositories/pet_repository.dart';
+import "dart:async";
+
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:pummel_the_fish/data/models/pet.dart";
+import "package:pummel_the_fish/data/repositories/pet_repository.dart";
 
 const petCollection = "pets";
 
 class FirestorePetRepository implements PetRepository {
   final FirebaseFirestore firestore;
 
-  FirestorePetRepository({
+  const FirestorePetRepository({
     required this.firestore,
   });
+
+  Stream<List<Pet>> getPetsStream() {
+    return firestore.collection(petCollection).snapshots().map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => Pet.fromMap(doc.data())).toList(),
+        );
+  }
 
   @override
   Future<List<Pet>> getAllPets() async {
     final petSnapshots = await firestore.collection(petCollection).get();
-
     final petList = petSnapshots.docs
         .map((snapshot) => Pet.fromMap(snapshot.data()))
         .toList();
@@ -46,7 +52,6 @@ class FirestorePetRepository implements PetRepository {
   Future<void> updatePet(Pet pet) async {
     await firestore.collection(petCollection).doc(pet.id).update(pet.toMap());
   }
-
   @override
   Future<Pet?> getPetById(String petId) async {
     final document = await firestore.collection(petCollection).doc(petId).get();
@@ -59,8 +64,8 @@ class FirestorePetRepository implements PetRepository {
   }
 
   @override
-  Future<void> deletePetById(String id) async {
-    await firestore.collection(petCollection).doc(id).delete();
+  Future<void> deletePetById(String petId) async {
+    await firestore.collection(petCollection).doc(petId).delete();
   }
 
   Future<List<Pet>> getPetBySpecies(Species species) async {
@@ -69,8 +74,12 @@ class FirestorePetRepository implements PetRepository {
         .where("species", isEqualTo: species.index)
         .get();
 
-    final petList =
-        petsSnapshot.docs.map((doc) => Pet.fromMap(doc.data())).toList();
+    final petList = petsSnapshot.docs
+        .map(
+          (doc) => Pet.fromMap(doc.data()),
+        )
+        .toList();
+
     return petList;
   }
 
@@ -79,9 +88,10 @@ class FirestorePetRepository implements PetRepository {
         .collection(petCollection)
         .orderBy("height", descending: true)
         .get();
-    final petList = petsSnapshot.docs
-        .map((doc) => Pet.fromMap(doc.data()))
-        .toList();
+
+    final petList =
+        petsSnapshot.docs.map((doc) => Pet.fromMap(doc.data())).toList();
+
     return petList;
   }
 }

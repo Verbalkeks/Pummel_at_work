@@ -163,7 +163,7 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
 
 class _InfoCardsColumn extends StatelessWidget {
   const _InfoCardsColumn({
-    super.key,
+    //super.key,
     required this.pet,
   });
 

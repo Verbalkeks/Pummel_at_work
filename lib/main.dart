@@ -1,34 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pummel_the_fish/data/models/pet.dart';
-import 'package:pummel_the_fish/data/repositories/fake_pet_repository.dart';
 import 'package:pummel_the_fish/screens/create_pet_screen.dart';
-import 'package:pummel_the_fish/screens/detail_pet_screen.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/screens/splash_screen.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import "package:pummel_the_fish/firebase_options.dart";
-
-// class ExampleWidget extends StatelessWidget {
-//   const ExampleWidget({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     // Hier wird das Widget gebaut
-//   }
-// }
-
-// class ExampleWidget extends StatefulWidget {
-//   const ExampleWidget({super.key});
-//   @override
-//   State<ExampleWidget> createState() => _ExampleWidgetState();
-// }
-
-// class _ExampleWidgetState extends State<ExampleWidget> {
-//   @override
-//   Widget build(BuildContext context) {
-//     // Hier wird das Widget gebaut
-//   }
-// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,5 @@
 import "dart:async";
 import "package:flutter/material.dart";
-import "package:pummel_the_fish/screens/home_screen.dart";
 import "package:pummel_the_fish/theme/custom_colors.dart";
 
 class SplashScreen extends StatelessWidget {
@@ -8,7 +7,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(milliseconds: 2125), () {
       Navigator.pushReplacementNamed(context, "/home");
     });
 
