@@ -231,7 +231,6 @@ class _EditPetScreenState extends State<EditPetScreen> {
                   side: const BorderSide(color: CustomColors.blueDark),
                   onChanged: (bool? value) {
                     if (value != null) {
-                      print(value);
                       setState(() {
                         currentIsFemale = value;
                       });

@@ -4,6 +4,8 @@ import "package:pummel_the_fish/data/models/pet.dart";
 import "package:pummel_the_fish/data/repositories/firestore_pet_repository.dart";
 import "package:pummel_the_fish/screens/edit_pet_screen.dart";
 import "package:pummel_the_fish/theme/custom_colors.dart";
+import "package:pummel_the_fish/widgets/custom_button.dart";
+import "package:pummel_the_fish/widgets/inherited_adoption_bag.dart";
 
 class DetailPetScreen extends StatefulWidget {
   final Pet pet;
@@ -50,9 +52,9 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
           title: Text(pet.name),
           actions: [
             IconButton(
-                onPressed: () => _onEditPet(pet), icon: Icon(Icons.edit)),
+                onPressed: () => _onEditPet(pet), icon: const Icon(Icons.edit)),
             IconButton(
-                onPressed: () => _onDeletePet(pet.id), icon: Icon(Icons.remove))
+                onPressed: () => _onDeletePet(pet.id), icon: const Icon(Icons.remove))
           ],
         ),
         body: SafeArea(
@@ -66,7 +68,7 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: _BuildImageStack(pet, context),
+                      child: _buildImageStack(pet, context),
                     ),
                     Expanded(
                       flex: 1,
@@ -82,7 +84,7 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    _BuildImageStack(pet, context),
+                    _buildImageStack(pet, context),
                     _InfoCardsColumn(pet: pet),
                   ],
                 ),
@@ -90,11 +92,12 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
             },
           ),
         ),
+
       ),
     );
   }
 
-  Stack _BuildImageStack(Pet pet, BuildContext context) {
+  Stack _buildImageStack(Pet pet, BuildContext context) {
     return Stack(
       children: [
         _buildImage(pet.species),
@@ -190,6 +193,13 @@ class _InfoCardsColumn extends StatelessWidget {
                     : pet.species == Species.cat
                         ? "Katze"
                         : "Fisch",
+          ),
+          const SizedBox(height: 16),
+          CustomButton(
+            onPressed: () {
+              InheritedAdoptionBag.of(context).addPet();
+            },
+            label: 'Adoptieren'
           ),
         ],
       ),

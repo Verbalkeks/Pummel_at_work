@@ -33,15 +33,15 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
       appBar: AppBar(
         title: const Text("Neues Tier anlegen"),
       ),
-      body: _CreatePetFormular(),
+      body: _createPetFormular(),
     );
   }
 
-  SafeArea _CreatePetFormular() {
+  SafeArea _createPetFormular() {
     return SafeArea(
       child: SingleChildScrollView(
         padding: MediaQuery.of(context).orientation == Orientation.portrait
-            ? EdgeInsets.all(24)
+            ? const EdgeInsets.all(24)
             : EdgeInsets.symmetric(
                 vertical: 40,
                 horizontal: MediaQuery.of(context).size.width / 5),
@@ -49,25 +49,25 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
           key: _formKey,
           child: Column(
             children: [
-              _CreatePetTextFormField(
+              _createPetTextFormField(
                   unitFullText: "Name",
                   unitShortText: "",
                   textInputType: TextInputType.text),
-              _CreatePetTextFormField(
+              _createPetTextFormField(
                   unitFullText: "Alter",
                   unitShortText: "Jahre",
                   textInputType: TextInputType.number),
-              _CreatePetTextFormField(
+              _createPetTextFormField(
                   unitFullText: "Höhe",
                   unitShortText: "cm",
                   textInputType: TextInputType.number),
-              _CreatePetTextFormField(
+              _createPetTextFormField(
                   unitFullText: "Gewicht",
                   unitShortText: "g",
                   textInputType: TextInputType.number),
-              _ChoseSpeciesDropdown(),
-              _IsFemaleCheckbox(),
-              _ValidateAndSubmitButton(),
+              _choseSpeciesDropdown(),
+              _isFemaleCheckbox(),
+              _validateAndSubmitButton(),
             ],
           ),
         ),
@@ -75,7 +75,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     );
   }
 
-  CustomButton _ValidateAndSubmitButton() {
+  CustomButton _validateAndSubmitButton() {
     return CustomButton(
       onPressed: _addPet,
       label: "Speichern",
@@ -120,7 +120,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     }
   }
 
-  CheckboxListTile _IsFemaleCheckbox() {
+  CheckboxListTile _isFemaleCheckbox() {
     return CheckboxListTile(
       title: Text(
         "Weiblich",
@@ -133,7 +133,6 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
       value: currentIsFemale,
       onChanged: (bool? value) {
         if (value != null) {
-          print(value);
           setState(() {
             currentIsFemale = value;
           });
@@ -142,7 +141,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     );
   }
 
-  DropdownButtonFormField<Species> _ChoseSpeciesDropdown() {
+  DropdownButtonFormField<Species> _choseSpeciesDropdown() {
     TextStyle bodyLarge = Theme.of(context).textTheme.bodyLarge!;
     return DropdownButtonFormField<Species>(
       hint: Text("Wählen Sie eine Spezies", style: bodyLarge),
@@ -182,7 +181,7 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
     );
   }
 
-  TextFormField _CreatePetTextFormField({
+  TextFormField _createPetTextFormField({
     required String unitFullText,
     required String unitShortText,
     required TextInputType textInputType,

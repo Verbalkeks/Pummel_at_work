@@ -23,7 +23,6 @@ class RestPetRepository implements PetRepository {
     );
 
     if (response.statusCode == 201) {
-      print("Kuscheltier erfolgreich hinzugefügt");
       return;
     } else {
       throw Exception("Beim Hinzufügen des Kuscheltiers ging etwas schief");
@@ -68,7 +67,6 @@ class RestPetRepository implements PetRepository {
       },
     );
     if (response.statusCode == 200) {
-      print("Kuscheltier erfolgreich aktualisiert.");
       return;
     } else {
       throw Exception("Beim Aktualisieren des Pets ging etwas schief");
@@ -77,10 +75,9 @@ class RestPetRepository implements PetRepository {
 
   @override
   Future<void> deletePetById(String id) async {
-    final uri = Uri.parse("$baseUrl/pets/${id}");
+    final uri = Uri.parse("$baseUrl/pets/$id");
     final response = await httpClient.delete(uri);
     if (response.statusCode == 204) {
-      print("GoodBye Kuscheltier.");
       return;
     } else {
       throw Exception("Beim Löschen des Kuscheltiers ging etwas schief");
