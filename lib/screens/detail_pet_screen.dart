@@ -35,7 +35,7 @@ class _DetailPetScreenState extends State<DetailPetScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // verhindert automatisches Zurückspringen
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           Navigator.pushNamed(context, "/home");
