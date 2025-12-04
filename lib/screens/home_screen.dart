@@ -1,9 +1,7 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import "package:pummel_the_fish/data/models/pet.dart";
 import "package:pummel_the_fish/data/repositories/firestore_pet_repository.dart";
-import "package:pummel_the_fish/logic/cubit/cubit/manage_pets_cubit.dart";
+import "package:pummel_the_fish/logic/cubit/manage_pets_cubit.dart";
 import "package:pummel_the_fish/widgets/adoption_bag.dart";
 import "package:pummel_the_fish/widgets/inherited_adoption_bag.dart";
 import "package:pummel_the_fish/widgets/pet_list_error.dart";
