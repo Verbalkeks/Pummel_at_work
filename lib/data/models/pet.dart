@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:pummel_the_fish/data/models/owner.dart';
 import 'dart:convert';
 
 enum Species { dog, cat, bird, fish }
 
-class Pet {
+class Pet extends Equatable {
   final String id;
   final String name;
   final Species species;
@@ -24,7 +25,7 @@ class Pet {
       this.owner});
   @override
   String toString() {
-    return "Pet(id: $id,\nname: $name,\nspecies: $species,\nweight: $weight,\nheight: $height,\nage: $age,\nisFemale: $isFemale,\nowner: $owner,)";
+    return "Pet(hashCode: $hashCode, \nid: $id,\nname: $name,\nspecies: $species,\nweight: $weight,\nheight: $height,\nage: $age,\nisFemale: $isFemale,\nowner: $owner,)";
   }
 
   factory Pet.fromMap(Map<String, dynamic> map) {
@@ -76,5 +77,19 @@ class Pet {
       isFemale: isFemale ?? this.isFemale,
       owner: owner ?? this.owner,
     );
+  }
+
+  @override
+  List<Object?> get props {
+    return [
+      id,
+      name,
+      species,
+      weight,
+      height,
+      age,
+      isFemale,
+      owner,
+    ];
   }
 }
