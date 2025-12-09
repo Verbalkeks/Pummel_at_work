@@ -21,7 +21,6 @@ void main() {
       "name": "Kira",
       "species": 0,
       "weight": 250.0,
-
       "height": 20.0,
       "age_in_years": 10,
       "is_female": true

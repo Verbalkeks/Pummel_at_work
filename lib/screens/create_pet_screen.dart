@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pummel_the_fish/data/models/pet.dart';
 import 'package:pummel_the_fish/data/repositories/firestore_pet_repository.dart';
+import 'package:pummel_the_fish/logic/cubit/manage_pets_cubit.dart';
 import 'package:pummel_the_fish/theme/custom_colors.dart';
 import 'package:pummel_the_fish/widgets/custom_button.dart';
 
@@ -24,7 +26,8 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
   @override
   void initState() {
     super.initState();
-    firestorePetRepository = FirestorePetRepository(firestore: FirebaseFirestore.instance);
+    firestorePetRepository =
+        FirestorePetRepository(firestore: FirebaseFirestore.instance);
   }
 
   @override
@@ -95,6 +98,9 @@ class _CreatePetScreenState extends State<CreatePetScreen> {
       );
       try {
         await firestorePetRepository.addPet(pet);
+        if (mounted) {
+          context.read<ManagePetsCubit>().getAllPets();
+        }
 
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(

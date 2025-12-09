@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pummel_the_fish/data/repositories/firestore_pet_repository.dart';
+import 'package:pummel_the_fish/logic/cubit/manage_pets_cubit.dart';
 import 'package:pummel_the_fish/screens/create_pet_screen.dart';
 import 'package:pummel_the_fish/screens/home_screen.dart';
 import 'package:pummel_the_fish/screens/splash_screen.dart';
@@ -29,93 +30,101 @@ class MyApp extends StatelessWidget {
         create: (context) => FirestorePetRepository(
           firestore: FirebaseFirestore.instance,
         ),
-        child: MaterialApp(
-          title: 'Pummel The Fish',
-          theme: ThemeData(
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: CustomColors.blueLight,
-              foregroundColor: CustomColors.white,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<ManagePetsCubit>(
+              create: (context) =>
+                ManagePetsCubit(context.read<FirestorePetRepository>())
             ),
-            colorScheme: const ColorScheme(
-              brightness: Brightness.light,
-              primary: CustomColors.blueDark,
-              onPrimary: CustomColors.white,
-              secondary: CustomColors.orange,
-              onSecondary: CustomColors.white,
-              error: CustomColors.red,
-              onError: CustomColors.white,
-              surface: CustomColors.white,
-              onSurface: CustomColors.blueLight,
-            ),
-            inputDecorationTheme: const InputDecorationTheme(
-              labelStyle: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: CustomColors.blueDark,
+          ],
+          child: MaterialApp(
+            title: 'Pummel The Fish',
+            theme: ThemeData(
+              useMaterial3: true,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: CustomColors.blueLight,
+                foregroundColor: CustomColors.white,
               ),
-              floatingLabelStyle: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
-                color: CustomColors.blueDark,
+              colorScheme: const ColorScheme(
+                brightness: Brightness.light,
+                primary: CustomColors.blueDark,
+                onPrimary: CustomColors.white,
+                secondary: CustomColors.orange,
+                onSecondary: CustomColors.white,
+                error: CustomColors.red,
+                onError: CustomColors.white,
+                surface: CustomColors.white,
+                onSurface: CustomColors.blueLight,
               ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: CustomColors.blueDark),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustomColors.blueLight,
+              inputDecorationTheme: const InputDecorationTheme(
+                labelStyle: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: CustomColors.blueDark,
+                ),
+                floatingLabelStyle: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                  color: CustomColors.blueDark,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: CustomColors.blueDark),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustomColors.blueLight,
+                  ),
+                ),
+                errorBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: CustomColors.red),
+                ),
+                focusedErrorBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: CustomColors.red),
                 ),
               ),
-              errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: CustomColors.red),
-              ),
-              focusedErrorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: CustomColors.red),
-              ),
-            ),
-            fontFamily: "Comfortaa",
-            textTheme: const TextTheme(
-              headlineLarge: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-                color: CustomColors.blueDark,
-              ),
-              titleMedium: TextStyle(
-                fontFamily: "Comfortaa",
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                color: CustomColors.blueMedium,
-              ),
-              bodyLarge: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: CustomColors.blueDark,
-              ),
-              bodyMedium: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                color: CustomColors.blueDark,
-              ),
-              bodySmall: TextStyle(
-                fontFamily: "Titillium Web",
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
-                color: CustomColors.blueDark,
+              fontFamily: "Comfortaa",
+              textTheme: const TextTheme(
+                headlineLarge: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  color: CustomColors.blueDark,
+                ),
+                titleMedium: TextStyle(
+                  fontFamily: "Comfortaa",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: CustomColors.blueMedium,
+                ),
+                bodyLarge: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: CustomColors.blueDark,
+                ),
+                bodyMedium: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: CustomColors.blueDark,
+                ),
+                bodySmall: TextStyle(
+                  fontFamily: "Titillium Web",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                  color: CustomColors.blueDark,
+                ),
               ),
             ),
+            initialRoute: "/",
+            routes: {
+              "/": (context) => const SplashScreen(),
+              "/home": (context) => const HomeScreen(),
+              "/create": (context) => const CreatePetScreen(),
+            },
           ),
-          initialRoute: "/",
-          routes: {
-            "/": (context) => const SplashScreen(),
-            "/home": (context) => const HomeScreen(),
-            "/create": (context) => const CreatePetScreen(),
-          },
         ),
       ),
     );
